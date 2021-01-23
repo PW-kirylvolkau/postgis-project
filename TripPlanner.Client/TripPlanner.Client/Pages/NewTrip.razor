@@ -1,0 +1,64 @@
+@page "/trip"
+@inject IHttpService HttpService;
+@inject IAlertService AlertService;
+@inherits NewTripBase
+@attribute [Authorize]
+
+<h1>Leaflet Map Test</h1>
+
+<div class="my-3">
+    <LeafletMap
+        Map="PositionMap" 
+        TileLayer="OpenStreetMapsTileLayer"
+        Click=""
+    />
+</div>
+
+<div class="my-3">
+    <EditForm Model="MapStateViewModel" OnValidSubmit="SetMapState">
+        <h3>Map State</h3>
+        <button class="btn btn-primary my-3" @onclick="GetMapState">Get Map State</button>
+        <button type="submit" class="btn btn-primary my-3">Set Map State</button>
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="centreLat">Centre Latitude</label>
+                    <InputNumber id="centreLat" @bind-Value="@MapStateViewModel.MapCentreLatitude" class="form-control" placeholder="Centre latitude" />
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="centreLng">Centre Longitude</label>
+                    <InputNumber id="centreLng" @bind-Value="@MapStateViewModel.MapCentreLongitude" class="form-control" placeholder="Centre longitude" />
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="zoom">Zoom</label>
+                    <InputNumber id="zoom" @bind-Value="@MapStateViewModel.Zoom" class="form-control" placeholder="Zoom level" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+    <EditForm Model="MarkerViewModel" OnValidSubmit="AddMarkerAtMapCenter">
+        <h3>Add Marker at Map Centre</h3>
+        <button type="submit" class="btn btn-primary my-3">Add Marker</button>
+        <div class="form-row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="title">Title of Marker</label>
+                    <InputText id="title" @bind-Value="@MarkerViewModel.Title" class="form-control" placeholder="Title of marker" />
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+</div>
+
+@code
+{
+        private const string Text = "Hooray!";
+}

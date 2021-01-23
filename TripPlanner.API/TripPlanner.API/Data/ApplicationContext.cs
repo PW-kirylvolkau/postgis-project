@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using TripPlanner.API.Authentication;
+using TripPlanner.API.Models;
 
 namespace TripPlanner.API.Data
 {
     public class ApplicationContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Trip> Trips { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)  
         {  
   

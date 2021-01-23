@@ -43,8 +43,8 @@ namespace TripPlanner.API.Controllers
   
                 var authClaims = new List<Claim>  
                 {  
-                    new(ClaimTypes.Name, user.UserName),  
-                    new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
+                    new(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
                 };
                 
                 authClaims.AddRange(
@@ -62,6 +62,8 @@ namespace TripPlanner.API.Controllers
   
                 return Ok(new  
                 {  
+                    userName = user.UserName,
+                    email = user.Email,
                     token = new JwtSecurityTokenHandler().WriteToken(token),  
                     expiration = token.ValidTo  
                 });  

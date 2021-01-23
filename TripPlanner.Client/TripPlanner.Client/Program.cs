@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TripPlanner.Client.Models.Auth;
+using TripPlanner.Client.Services;
 
 namespace TripPlanner.Client
 {
@@ -17,10 +19,23 @@ namespace TripPlanner.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(
-                sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)});
+            builder.Services
+                .AddScoped(
+                    sp => new HttpClient
+                    {
+                        BaseAddress = new Uri(builder.Configuration["apiURL"])
+                    })
+                .AddScoped<IAccountService, AccountService>()
+                .AddScoped<IHttpService, HttpService>()
+                .AddScoped<ILocalStorageService, LocalStorageService>()
+                .AddScoped<IAlertService, AlertService>();
 
-            await builder.Build().RunAsync();
+            var host = builder.Build();
+            
+            var accountService = host.Services.GetRequiredService<IAccountService>();
+            await accountService.Initialize();
+
+            await host.RunAsync();
         }
     }
 }

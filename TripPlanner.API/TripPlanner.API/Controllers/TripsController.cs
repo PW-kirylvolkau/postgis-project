@@ -1,0 +1,92 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using TripPlanner.API.Authentication;
+using TripPlanner.API.Data;
+using TripPlanner.API.Models;
+using TripPlanner.API.Repository;
+
+namespace TripPlanner.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class TripsController : ControllerBase
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly TripRepository _tripRepository;
+
+        public TripsController(
+            UserManager<ApplicationUser> userManager,
+            TripRepository tripRepository)
+        {
+            _userManager = userManager;
+            _tripRepository = tripRepository;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var trip = await _tripRepository.GetById(id);
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user.Id != trip.User.Id) return NotFound();
+
+            return Ok(trip);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CreateTrip(Trip trip)
+        {
+            trip.User =  await _userManager.GetUserAsync(User);
+            var created = await _tripRepository.Add(trip);
+            return created != null
+                ? CreatedAtAction("GetById", new {id = created.Id}, created) 
+                : BadRequest();
+        }
+
+        [HttpGet]
+        public async Task<List<Trip>> GetAll()
+        {
+            var allTrips = await _tripRepository.GetAll();
+            var user = await _userManager.GetUserAsync(User);
+            return allTrips.FindAll(t => t.UserId == user.Id).ToList();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var trip = await _tripRepository.GetById(id);
+            var user = await _userManager.GetUserAsync(User);
+            
+            if (user.Id != trip.User.Id) return NotFound();
+            
+            var deleted = await _tripRepository.Delete(id);
+            return Ok(deleted);
+        }
+
+        [HttpPut(template: "{id}")]
+        public async Task<IActionResult> Update(int id, Trip model)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var trip = await _tripRepository.GetById(model.Id);
+
+            if (user.Id != trip.User.Id) return NotFound();
+
+            var updated = await _tripRepository.Update(model);
+            return Ok(updated);
+        }
+
+        private async Task<bool> UserIsOwner(int tripId)
+        {
+            var trip = await _tripRepository.GetById(tripId);
+            var user = await _userManager.GetUserAsync(User);
+            return trip.User.Id == user.Id;
+        }
+
+    }
+}

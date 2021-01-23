@@ -1,0 +1,13 @@
+@page "/account/logout"
+@layout MainLayout
+@inject IAccountService AccountService
+@inject IAlertService AlertService
+
+@code {
+    protected override async void OnInitialized()
+    {
+        AlertService.Clear();
+        await AccountService.Logout();
+        AlertService.Success("You have been logged out.");
+    }
+}

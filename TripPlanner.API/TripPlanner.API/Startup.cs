@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TripPlanner.API.Authentication;
 using TripPlanner.API.Data;
+using TripPlanner.API.Repository;
+using Newtonsoft.Json;
 
 namespace TripPlanner.API
 {
@@ -33,32 +36,35 @@ namespace TripPlanner.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+            services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "TripPlanner.API", Version = "v1"});
             });
-              
+
+            services.AddScoped<TripRepository>();
+
             // For Entity Framework  
             services.AddDbContext<ApplicationContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("MSSQL")));  
   
             // For Identity  
-            services.AddIdentity<ApplicationUser, IdentityRole>()  
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => 
+                    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier)  
                 .AddEntityFrameworkStores<ApplicationContext>()  
                 .AddDefaultTokenProviders();  
   
             // Adding Authentication  
-            services.AddAuthentication(options =>  
-                {  
+            services
+                .AddAuthentication(options => {  
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
                     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
-                })  
-  
-                // Adding Jwt Bearer  
-                .AddJwtBearer(options =>  
-                {  
+                })
+                .AddJwtBearer(options => {  
                     options.SaveToken = true;  
                     options.RequireHttpsMetadata = false;  
                     options.TokenValidationParameters = new TokenValidationParameters()  
@@ -70,6 +76,19 @@ namespace TripPlanner.API
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
                     };  
                 });  
+            
+            services.AddCors(options => {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins("http://localhost:6000",
+                            "https://localhost:6001")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,7 +104,9 @@ namespace TripPlanner.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            
+            app.UseCors();
+            
             app.UseAuthentication();  
             app.UseAuthorization();  
 
