@@ -9,12 +9,14 @@ using TripPlanner.API.Authentication;
 using TripPlanner.API.Data;
 using TripPlanner.API.Models;
 using TripPlanner.API.Repository;
+using GeoAPILibrary;
 
 namespace TripPlanner.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
+    [AutoValidateAntiforgeryToken]
     public class TripsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -27,8 +29,15 @@ namespace TripPlanner.API.Controllers
             _userManager = userManager;
             _tripRepository = tripRepository;
         }
-
+        
+        /// <summary>
+        /// Trips.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> GetById(int id)
         {
             var trip = await _tripRepository.GetById(id);
@@ -42,7 +51,7 @@ namespace TripPlanner.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTrip(Trip trip)
         {
-            trip.User =  await _userManager.GetUserAsync(User);
+            trip.User = await _userManager.GetUserAsync(User);
             var created = await _tripRepository.Add(trip);
             return created != null
                 ? CreatedAtAction("GetById", new {id = created.Id}, created) 
@@ -62,6 +71,8 @@ namespace TripPlanner.API.Controllers
         {
             var trip = await _tripRepository.GetById(id);
             var user = await _userManager.GetUserAsync(User);
+
+            var temp = await GeoAPIFunctions.GetCoordinates("Minsk");
             
             if (user.Id != trip.User.Id) return NotFound();
             
