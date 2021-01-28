@@ -1,16 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripPlanner.API.Models;
 using TripPlanner.API.Repository;
 
 namespace TripPlanner.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PointsController : ControllerBase
     {
+        // TODO: same task as for the 
         private readonly PointRepository _pointRepository;
 
         public PointsController(PointRepository pointRepository)

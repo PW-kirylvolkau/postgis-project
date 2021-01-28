@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TripPlanner.API.Models
 {
@@ -9,8 +10,6 @@ namespace TripPlanner.API.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public Trip Trip { get; set; }
 
         public double Lat { get; set; }
         

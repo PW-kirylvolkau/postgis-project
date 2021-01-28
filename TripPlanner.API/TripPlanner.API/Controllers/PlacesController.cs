@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripPlanner.API.Models;
 using TripPlanner.API.Repository;
 
 namespace TripPlanner.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PlacesController : ControllerBase
@@ -26,7 +28,8 @@ namespace TripPlanner.API.Controllers
 
             return Ok(place);
         }
-
+        // TODO
+        // * GetAllForPoint(int PointId)
         [HttpGet]
         public async Task<List<Place>> GetAll()
         {
@@ -34,7 +37,9 @@ namespace TripPlanner.API.Controllers
 
             return allPlaces.ToList();
         }
-
+        
+        // TODO
+        // * AddPlaceToPoint(int pointId)
         [HttpPost]
         public async Task<IActionResult> CreatePoint(Place place)
         {
@@ -45,6 +50,7 @@ namespace TripPlanner.API.Controllers
             return CreatedAtAction("GetById", new {id = created.Id, created});
         }
 
+        // remains
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -55,7 +61,8 @@ namespace TripPlanner.API.Controllers
             var deleted = await _placeRepository.Delete(id);
             return Ok(deleted);
         }
-
+        
+        // remains
         [HttpPut(template: "{id}")]
         public async Task<IActionResult> Update(int id, Place model)
         {

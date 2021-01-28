@@ -63,7 +63,7 @@ namespace TripPlanner.API.Controllers
         {
             var allTrips = await _tripRepository.GetAll();
             var user = await _userManager.GetUserAsync(User);
-            return allTrips.FindAll(t => t.UserId == user.Id).ToList();
+            return allTrips.FindAll(t => t.User.Id == user.Id).ToList();
         }
 
         [HttpDelete("{id}")]

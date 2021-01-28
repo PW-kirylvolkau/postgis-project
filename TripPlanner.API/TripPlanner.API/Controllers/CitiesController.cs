@@ -1,16 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TripPlanner.API.Models;
 using TripPlanner.API.Repository;
 
 namespace TripPlanner.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CitiesController : ControllerBase
     {
+        //TODO
+        // * Remove the controller.
         private readonly CityRepository _cityRepository;
         
         public CitiesController(CityRepository cityRepository)
