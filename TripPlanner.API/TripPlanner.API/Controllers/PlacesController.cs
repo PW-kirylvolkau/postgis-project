@@ -8,15 +8,20 @@ using TripPlanner.API.Repository;
 
 namespace TripPlanner.API.Controllers
 {
-    [Authorize]
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class PlacesController : ControllerBase
     {
         private readonly PlaceRepository _placeRepository;
-        public PlacesController(PlaceRepository placeRepository)
+        private readonly PointRepository _pointRepository;
+        public PlacesController(
+            PlaceRepository placeRepository, 
+            PointRepository pointRepository
+            )
         {
             _placeRepository = placeRepository;
+            _pointRepository = pointRepository;
         }
 
         [HttpGet("{id}")]
@@ -30,18 +35,39 @@ namespace TripPlanner.API.Controllers
         }
         // TODO
         // * GetAllForPoint(int PointId)
+        [HttpGet("{pointId}")]
+        public async Task<List<Place>> GetAllForPoint(int pointId)
+        {
+            var point = await _pointRepository.GetById(pointId);
+            return point.Places.ToList();
+        }
+
         [HttpGet]
         public async Task<List<Place>> GetAll()
         {
             var allPlaces = await _placeRepository.GetAll();
-
             return allPlaces.ToList();
         }
         
         // TODO
         // * AddPlaceToPoint(int pointId)
         [HttpPost]
-        public async Task<IActionResult> CreatePoint(Place place)
+        public async Task<IActionResult> AddPlace(int pointId, Place place)
+        {
+            if(!(await _pointRepository.Exists(pointId))) return NotFound();
+
+            var point = await _pointRepository.GetById(pointId);
+
+            if(point.Places.Contains(place)) return BadRequest();
+
+            var created = await CreatePlace(place);
+
+            point.Places.Add(place);
+
+            return Ok(created);
+        }
+
+        public async Task<IActionResult> CreatePlace(Place place)
         {
             var created = await _placeRepository.Add(place);
 

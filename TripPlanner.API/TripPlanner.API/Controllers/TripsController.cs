@@ -30,11 +30,6 @@ namespace TripPlanner.API.Controllers
             _tripRepository = tripRepository;
         }
         
-        /// <summary>
-        /// Trips.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -47,6 +42,21 @@ namespace TripPlanner.API.Controllers
 
             return Ok(trip);
         }
+
+        [HttpGet]
+        public async Task<List<Trip>> GetAll()
+        {
+            var allTrips = await _tripRepository.GetAll();
+            var user = await _userManager.GetUserAsync(User);
+            return allTrips.FindAll(t => t.User.Id == user.Id).ToList();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<List<Point>> GetAllPoints(int id)
+        {
+            var trip = await _tripRepository.GetById(id);
+            return trip.Points.ToList();
+        }
         
         [HttpPost]
         public async Task<IActionResult> CreateTrip(Trip trip)
@@ -56,14 +66,6 @@ namespace TripPlanner.API.Controllers
             return created != null
                 ? CreatedAtAction("GetById", new {id = created.Id}, created) 
                 : BadRequest();
-        }
-
-        [HttpGet]
-        public async Task<List<Trip>> GetAll()
-        {
-            var allTrips = await _tripRepository.GetAll();
-            var user = await _userManager.GetUserAsync(User);
-            return allTrips.FindAll(t => t.User.Id == user.Id).ToList();
         }
 
         [HttpDelete("{id}")]
