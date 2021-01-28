@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace TripPlanner.API.Models
 {
@@ -14,5 +15,8 @@ namespace TripPlanner.API.Models
         public double Lat { get; set; }
         
         public double Lng { get; set; }
+
+        //Added places
+        public List<Place> Places { get; set; }
     }
 }
