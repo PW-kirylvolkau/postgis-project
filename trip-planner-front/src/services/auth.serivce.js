@@ -1,7 +1,8 @@
 import {saveToken} from './token.service';
+import Config from '../appconfig.json';
 
 export async function loginUser(credentials) {
-    return fetch('https://localhost:5001/api/authenticate/login', {
+    return fetch(Config.api.baseURL + Config.api.loginURN, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

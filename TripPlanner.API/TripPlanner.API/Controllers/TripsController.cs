@@ -16,7 +16,6 @@ namespace TripPlanner.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    [AutoValidateAntiforgeryToken]
     public class TripsController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -51,7 +50,7 @@ namespace TripPlanner.API.Controllers
             return allTrips.FindAll(t => t.User.Id == user.Id).ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/points")]
         public async Task<List<Point>> GetAllPoints(int id)
         {
             var trip = await _tripRepository.GetById(id);

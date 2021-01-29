@@ -1,0 +1,26 @@
+import React from "react";
+
+function TripGeneral({id, name}) {
+    return (
+        <div className="container">
+            <div className="row">
+                <div className="col-sm-4">
+                    <b>Id</b>
+                </div>
+                <div className="col-sm-8">
+                    {id}
+                </div>
+            </div>
+            <div className="row">
+                <div className="col-sm-4">
+                    <b>Name</b>
+                </div>
+                <div className="col-sm-8">
+                    {name}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default TripGeneral;

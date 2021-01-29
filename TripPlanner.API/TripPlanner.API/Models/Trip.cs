@@ -13,6 +13,7 @@ namespace TripPlanner.API.Models
         public ApplicationUser User {get; set;}
         [Required]
         public string Name { get; set; }
+        public string Description { get; set; }
         public DateTime Start { get; set; }
         public DateTime Finish { get; set; }
         public List<Point> Points { get; set; }

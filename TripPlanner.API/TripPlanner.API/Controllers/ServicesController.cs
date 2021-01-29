@@ -65,13 +65,10 @@ namespace TripPlanner.API.Controllers
         }
 
         [HttpGet("address-to-list")]
-        public async Task<List<string>> GetAddressList(string address)
+        public async Task<List<object>> GetAddressList(string address)
         {
             var addressList = await GeoDataFunctions.GetAddressList(address);
             return addressList;
         }
-
-        
-
     }
 }

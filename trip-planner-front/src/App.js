@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 import Dashboard from "./components/Dashboard/Dashboard";
 import NewTrip from "./components/NewTrip/NewTrip";
@@ -9,6 +9,10 @@ import {getToken, deleteToken} from './services/token.service';
 function App() {
     const [token, setToken] = useState(getToken());
     const [active, setActive] = useState("dash");
+
+    useEffect(() => {
+        setToken(getToken());
+    })
 
     return (
         <div className="wrapper">
@@ -26,14 +30,14 @@ function App() {
                         {token ? <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="nav navbar-nav">
                                 <li className="nav-item mx-3">
-                                    <a className={"nav-link " + active === "dash" ? "active" : ""} href="#">
+                                    {/*<a className={"nav-link " + active === "dash" ? "active" : ""} href="#">*/}
                                         <Link to="/" onClick={() => setActive("dash")}>Dashboard</Link>
-                                    </a>
+                                    {/*</a>*/}
                                 </li>
                                 <li className="nav-item mx-3">
-                                    <a className={"nav-link " + active === "trip" ? "active" : ""} href="#">
+                                    {/*<a className={"nav-link " + active === "trip" ? "active" : ""} href="#">*/}
                                         <Link onClick={() => setActive("trip")} to="/trip/new">Add trip</Link>
-                                    </a>
+                                    {/*</a>*/}
                                 </li>
                                 <li className="nav-item mx-3">
                                     <button className="btn btn-light"

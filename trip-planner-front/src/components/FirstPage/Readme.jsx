@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown';
+import Config from '../../appconfig.json';
 
 function FirstPage() {
     const [md, setMD] = useState();
 
     useEffect(() => {
-        fetch("https://raw.githubusercontent.com/kirylvolkau/postgis-project/main/README.md")
+        fetch(Config.external.github)
             .then(data => data.text())
             .then(text => setMD(text));
     });

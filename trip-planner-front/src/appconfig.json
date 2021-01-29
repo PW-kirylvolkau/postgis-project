@@ -1,0 +1,16 @@
+{
+  "api": {
+    "baseURL": "https://localhost:5001/api/",
+    "loginURN": "authenticate/login/",
+    "registerURN": "authenticate/register/",
+    "tripURN": "trips/",
+    "pointURN": "points/",
+    "services": {
+      "serviceURN": "services/",
+      "geoapifyAutocomplete": "address-to-list"
+    }
+  },
+  "external": {
+    "github": "https://raw.githubusercontent.com/kirylvolkau/postgis-project/main/README.md"
+  }
+}

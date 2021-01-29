@@ -8,12 +8,12 @@ namespace GeoAPILibrary
 {    
     public static class GeoDataFunctions
     {
-        public static string apiKey = "47f523a46b944b47862e39509a7833a9";
+        public static string apiKey = "af613013187a4565b6e1934040b5da3f";
 
         public static async Task<string> getApi(string query)
         {
             HttpClient client = new HttpClient();
-            string url = "https://api.geoapify.com/v1/geocode"+query+"&apiKey="+apiKey;
+            string url = "https://api.geoapify.com/v1/geocode"+query;
             HttpResponseMessage response = await client.GetAsync(url);
             string result = await response.Content.ReadAsStringAsync();
             return result;
@@ -59,13 +59,21 @@ namespace GeoAPILibrary
             var dataList = await GetDataList(address);
             return dataList[0].Coords;
         }
-        public static async Task<List<string>> GetAddressList(string address)
+        public static async Task<List<object>> GetAddressList(string address)
         {
             var dataList = await GetDataList(address);
-            var addressList = new List<string>();
+            var addressList = new List<object>();
             foreach(var obj in dataList)
             {
-                addressList.Add(obj.Address);
+                addressList.Add(new
+                {
+                    address = obj.Address,
+                    coordinates = new
+                    {
+                        lat = obj.Coords.Lat,
+                        lng = obj.Coords.Lon
+                    }
+                });
             }
             return addressList;
         }
