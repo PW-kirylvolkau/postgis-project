@@ -46,6 +46,8 @@ namespace TripPlanner.API
             });
 
             services.AddScoped<TripRepository>();
+            services.AddScoped<PointRepository>();
+            services.AddScoped<PlaceRepository>();
 
             // For Entity Framework  
             services.AddDbContext<ApplicationContext>(options => 

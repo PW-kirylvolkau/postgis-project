@@ -12,5 +12,6 @@ export async function getAutocompleteLocation(search) {
         }
     })
         .then(data => data.json())
+        .then(resp => resp)
         .catch(e => alert(e));
 }

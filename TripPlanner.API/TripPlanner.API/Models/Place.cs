@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TripPlanner.API.Models
 {
@@ -7,6 +8,9 @@ namespace TripPlanner.API.Models
     {
         [Key]
         public int Id { get; set; }
+
+        public int PointId { get; set; }
+        public Point Point { get; set; }
 
         public string Name { get; set; }
 

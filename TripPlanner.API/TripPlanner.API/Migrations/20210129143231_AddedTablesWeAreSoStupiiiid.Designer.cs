@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TripPlanner.API.Data;
 
 namespace TripPlanner.API.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20210129143231_AddedTablesWeAreSoStupiiiid")]
+    partial class AddedTablesWeAreSoStupiiiid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,7 +227,7 @@ namespace TripPlanner.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PointId")
+                    b.Property<int?>("PointId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -255,7 +257,7 @@ namespace TripPlanner.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TripId")
+                    b.Property<int?>("TripId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -348,22 +350,16 @@ namespace TripPlanner.API.Migrations
 
             modelBuilder.Entity("TripPlanner.API.Models.Place", b =>
                 {
-                    b.HasOne("TripPlanner.API.Models.Point", "Point")
-                        .WithMany()
-                        .HasForeignKey("PointId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("Point");
+                    b.HasOne("TripPlanner.API.Models.Point", null)
+                        .WithMany("Places")
+                        .HasForeignKey("PointId");
                 });
 
             modelBuilder.Entity("TripPlanner.API.Models.Point", b =>
                 {
                     b.HasOne("TripPlanner.API.Models.Trip", "Trip")
                         .WithMany()
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .HasForeignKey("TripId");
 
                     b.Navigation("Trip");
                 });
@@ -375,6 +371,11 @@ namespace TripPlanner.API.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TripPlanner.API.Models.Point", b =>
+                {
+                    b.Navigation("Places");
                 });
 #pragma warning restore 612, 618
         }

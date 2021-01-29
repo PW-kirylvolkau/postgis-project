@@ -16,22 +16,26 @@ namespace TripPlanner.API.Controllers
     {
         private readonly PointRepository _pointRepository;
         private readonly TripRepository _tripRepository;
+        private readonly PlaceRepository _placeRepository;
 
         public PointsController(
             PointRepository pointRepository, 
-            TripRepository tripRepository
+            TripRepository tripRepository, PlaceRepository placeRepository
             )
         {
             _pointRepository = pointRepository;
             _tripRepository = tripRepository;
+            _placeRepository = placeRepository;
         }
 
         [HttpGet("{id}")]
         public async Task<List<Place>> GetAllPlaces(int id)
         {
             var point = await _pointRepository.GetById(id);
+            var places = await _placeRepository.GetAll();
+            var pointPlaces = places.Where(p => p.Point?.Id == id);
 
-            return point.Places.ToList();
+            return pointPlaces.ToList();
         }
 
         [HttpPost]
@@ -40,23 +44,9 @@ namespace TripPlanner.API.Controllers
             if(!(await _tripRepository.Exists(tripId))) return NotFound();
 
             var trip = await _tripRepository.GetById(tripId);
-
-            if(trip.Points.Contains(point)) return BadRequest();
-
-            var created = await CreatePoint(point);
-
-            trip.Points.Add(point);
-
-            return Ok(created);
-        }
-
-        private async Task<IActionResult> CreatePoint(Point point)
-        {
-            var created = await _pointRepository.Add(point);
-
-            if(created == null) return BadRequest();
-
-            return StatusCode(201, created);
+            point.Trip = trip;
+            var newPoint = await _pointRepository.Add(point);
+            return Ok(newPoint);
         }
 
         [HttpDelete("{id}")]

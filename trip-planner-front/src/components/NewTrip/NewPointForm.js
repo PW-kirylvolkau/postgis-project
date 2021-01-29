@@ -1,44 +1,84 @@
 import React, {useState} from 'react';
-import Autocomplete from 'react-autocomplete';
 import {addPointToTrip} from '../../services/point.service';
-import { getAutocompleteLocation } from '../../services/locations.service';
+import {getAutocompleteLocation} from '../../services/locations.service';
 
-function NewPointForm({tripId}) {
-    const [name, setName] = useState("");
+function NewPointForm({tripId, setUpdate}) {
+    const [address, setAddress] = useState("");
     const [suggestions, setSuggestions] = useState([]);
+    const [lat, setLat] = useState();
+    const [lng, setLng] = useState();
 
-    const getData = async (search) => {
-        const data = await getAutocompleteLocation(search);
-        setSuggestions(await data);
-        return data;
+    const getSetAutoCompletion = (value) => {
+        if (value.length > 0) {
+            getAutocompleteLocation(value)
+                .then(res => setSuggestions(res))
+                .catch(() => setSuggestions([]));
+        }
+    };
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        const payload = {
+            name: address,
+            lat,
+            lng
+        }
+
+        addPointToTrip(tripId, payload).then(()=> {
+
+        });
+        setAddress("");
+        setLng(undefined);
+        setLat(undefined);
+        setUpdate(true);
     }
 
     return (
-        <div className="card m-3">
-            <div className="card-header">
-                <h3>Add point</h3>
-            </div>
-            <div className="card-body">
-                <Autocomplete
-                    getItemValue={(item) => item.address}
-                    items={[
-                        ...suggestions
-                    ]}
-                    renderItem={(item, isHighlighted) =>
-                        <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
-                            {item.label}
-                        </div>
-                    }
-                    value={name}
+        <div className="container m-3">
+            <form onSubmit={onSubmit}>
+                <input
+                    type="text"
+                    className="form-control"
+                    value={address}
                     onChange={(e) => {
-                        getData(e.target.value);
-                        setName(e.target.value);
+                        setAddress(e.target.value);
+                        getSetAutoCompletion(e.target.value);
+                        setLat(undefined);
+                        setLng(undefined);
                     }}
-                    onSelect={(val) => setName(val)}
                 />
-            </div>
+                <div className="overflow-auto ml-1">
+                    {suggestions.map((val, key) => {
+                        return (
+                            <div key={key}
+                                 style={
+                                     {
+                                         zIndex: '2',
+                                         position: 'sticky',
+                                         border: '1px solid #c4c4c4',
+                                         height: '25px',
+                                         borderRadius: '5px'
+                                     }
+                                 }>
+                                <p onClick={(e) => {
+                                    e.preventDefault();
+                                    setAddress(val.address);
+                                    setSuggestions([]);
+                                    setLat(val.coordinates.lat);
+                                    setLng(val.coordinates.lng);
+                                }}>{val.address}</p>
+                            </div>
+                        )
+                    })}
+                </div>
+                <button type="submit"
+                        className="btn btn-success my-1"
+                >
+                    Add point.
+                </button>
+            </form>
         </div>
-    )
+    );
 }
 
 export default NewPointForm;

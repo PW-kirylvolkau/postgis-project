@@ -10,12 +10,12 @@ namespace TripPlanner.API.Models
     {
         [Key]
         public int Id { get; set; }
+        [ForeignKey("UserId")]
         public ApplicationUser User {get; set;}
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Start { get; set; }
         public DateTime Finish { get; set; }
-        public List<Point> Points { get; set; }
     }
 }

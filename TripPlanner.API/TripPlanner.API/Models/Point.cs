@@ -9,13 +9,14 @@ namespace TripPlanner.API.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
+
+        public int TripId { get; set; }
+        public Trip Trip { get; set; }
 
         public double Lat { get; set; }
         
         public double Lng { get; set; }
-
-        //Added places
-        public List<Place> Places { get; set; }
     }
 }

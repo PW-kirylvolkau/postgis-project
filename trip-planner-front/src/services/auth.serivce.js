@@ -1,4 +1,4 @@
-import {saveToken} from './token.service';
+import {deleteToken, saveToken} from './token.service';
 import Config from '../appconfig.json';
 
 export async function loginUser(credentials) {
@@ -24,4 +24,9 @@ export async function loginUser(credentials) {
             }
         })
         .catch(_ => null);
+}
+
+export async function logoutUser() {
+    deleteToken();
+    window.location.reload(false);
 }

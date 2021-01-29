@@ -24,9 +24,11 @@ namespace TripPlanner.API.Controllers
     {
 
         private readonly TripRepository _tripRepository;
-        public ServicesController(TripRepository tripRepository)
+        private readonly PointRepository _pointRepository;
+        public ServicesController(TripRepository tripRepository ,PointRepository pointRepository)
         {
             _tripRepository = tripRepository;
+            _pointRepository = pointRepository;
         }
         
 
@@ -42,14 +44,18 @@ namespace TripPlanner.API.Controllers
         public async Task<List<Point>> GetRoute(int tripId)
         {
             var trip = await _tripRepository.GetById(tripId);
-            return trip.Points;
+            var points = await _pointRepository.GetAll();
+            var tripPoints = points.Where(p => p.Trip.Id == tripId);
+            return tripPoints.ToList();
         }
 
         [HttpGet("optimized-route/{tripId}")]
         public async Task<List<Point>> GetOptimizedRoute(int tripId)
         {
             var trip = await _tripRepository.GetById(tripId);
-            var optimizedRoute = await TSPRecursion.GetOptRoute(trip.Points);
+            var points = await _pointRepository.GetAll();
+            var tripPoints = points.Where(p => p.Trip.Id == tripId).ToList();
+            var optimizedRoute = await TSPRecursion.GetOptRoute(tripPoints);
             return optimizedRoute;
         }
 

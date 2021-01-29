@@ -20,13 +20,16 @@ namespace TripPlanner.API.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TripRepository _tripRepository;
+        private readonly PointRepository _pointRepository;
 
         public TripsController(
             UserManager<ApplicationUser> userManager,
-            TripRepository tripRepository)
+            TripRepository tripRepository,
+            PointRepository pointRepository)
         {
             _userManager = userManager;
             _tripRepository = tripRepository;
+            _pointRepository = pointRepository;
         }
         
         [HttpGet("{id}")]
@@ -53,8 +56,8 @@ namespace TripPlanner.API.Controllers
         [HttpGet("{id}/points")]
         public async Task<List<Point>> GetAllPoints(int id)
         {
-            var trip = await _tripRepository.GetById(id);
-            return trip.Points.ToList();
+            var points = await _pointRepository.GetAll();
+            return points.Where(p => p.Trip.Id == id).ToList();
         }
         
         [HttpPost]

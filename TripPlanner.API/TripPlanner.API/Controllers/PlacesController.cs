@@ -39,7 +39,9 @@ namespace TripPlanner.API.Controllers
         public async Task<List<Place>> GetAllForPoint(int pointId)
         {
             var point = await _pointRepository.GetById(pointId);
-            return point.Places.ToList();
+            var places = await _placeRepository.GetAll();
+            var pointPlaces = places.Where(p => p.PointId == pointId);
+            return pointPlaces.ToList();
         }
 
         [HttpGet]
@@ -57,22 +59,21 @@ namespace TripPlanner.API.Controllers
             if(!(await _pointRepository.Exists(pointId))) return NotFound();
 
             var point = await _pointRepository.GetById(pointId);
+            var places = await _placeRepository.GetAll();
+            var pointPlaces =  places.Where(p => p.PointId == pointId);
 
-            if(point.Places.Contains(place)) return BadRequest();
+            if(pointPlaces.Contains(place)) return BadRequest();
+
+            place.PointId = pointId;
 
             var created = await CreatePlace(place);
 
-            point.Places.Add(place);
-
             return Ok(created);
         }
-        private async Task<IActionResult> CreatePlace(Place place)
+        private async Task<Place> CreatePlace(Place place)
         {
             var created = await _placeRepository.Add(place);
-
-            if(created == null) return BadRequest();
-
-            return CreatedAtAction("GetById", new {id = created.Id, created});
+            return created;
         }
 
         // remains
