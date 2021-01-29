@@ -27,24 +27,6 @@ namespace TripPlanner.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var point = await _pointRepository.GetById(id);
-
-            if(point == null) return NotFound();
-
-            return Ok(point);
-        }
-
-        [HttpGet]
-        public async Task<List<Point>> GetAll()
-        {
-            var allPoints = await _pointRepository.GetAll();
-
-            return allPoints.ToList();
-        }
-
-        [HttpGet("{id}")]
         public async Task<List<Place>> GetAllPlaces(int id)
         {
             var point = await _pointRepository.GetById(id);
@@ -68,13 +50,13 @@ namespace TripPlanner.API.Controllers
             return Ok(created);
         }
 
-        public async Task<IActionResult> CreatePoint(Point point)
+        private async Task<IActionResult> CreatePoint(Point point)
         {
             var created = await _pointRepository.Add(point);
 
             if(created == null) return BadRequest();
 
-            return CreatedAtAction("GetById", new {id = created.Id, created});
+            return StatusCode(201, created);
         }
 
         [HttpDelete("{id}")]

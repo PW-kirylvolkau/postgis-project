@@ -83,7 +83,8 @@ namespace TripPlanner.API
                     {
                         builder
                             .WithOrigins("http://localhost:6000",
-                            "https://localhost:6001")
+                            "https://localhost:6001",
+                            "http://localhost:3000")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();

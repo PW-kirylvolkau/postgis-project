@@ -66,8 +66,7 @@ namespace TripPlanner.API.Controllers
 
             return Ok(created);
         }
-
-        public async Task<IActionResult> CreatePlace(Place place)
+        private async Task<IActionResult> CreatePlace(Place place)
         {
             var created = await _placeRepository.Add(place);
 

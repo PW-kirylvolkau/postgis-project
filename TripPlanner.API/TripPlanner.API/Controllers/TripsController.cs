@@ -51,7 +51,7 @@ namespace TripPlanner.API.Controllers
             return allTrips.FindAll(t => t.User.Id == user.Id).ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/points")]
         public async Task<List<Point>> GetAllPoints(int id)
         {
             var trip = await _tripRepository.GetById(id);
@@ -74,8 +74,6 @@ namespace TripPlanner.API.Controllers
             var trip = await _tripRepository.GetById(id);
             var user = await _userManager.GetUserAsync(User);
 
-            var temp = await GeoAPIFunctions.GetCoordinates("Minsk");
-            
             if (user.Id != trip.User.Id) return NotFound();
             
             var deleted = await _tripRepository.Delete(id);
