@@ -11,6 +11,8 @@ using TripPlanner.API.Models;
 using TripPlanner.API.Repository;
 using TripMapApi;
 using GeoAPILibrary;
+using TripPlanner.RouteOptimization;
+using System;
 
 namespace TripPlanner.API.Controllers
 {
@@ -47,7 +49,8 @@ namespace TripPlanner.API.Controllers
         public async Task<List<Point>> GetOptimizedRoute(int tripId)
         {
             var trip = await _tripRepository.GetById(tripId);
-            return trip.Points;
+            var optimizedRoute = await TSPRecursion.GetOptRoute(trip.Points);
+            return optimizedRoute;
         }
 
         [HttpGet("address-to-coords")]
