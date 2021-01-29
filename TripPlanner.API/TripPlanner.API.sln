@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripPlanner.API", "TripPlan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoAPILibrary", "GeoAPILibrary\GeoAPILibrary.csproj", "{DC60325D-BFF8-498A-A5D3-F5ABB58014BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TripMapApi", "TripMapApi\TripMapApi.csproj", "{97D988F6-78A8-4239-8868-1C4341CD2670}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +46,17 @@ Global
 		{DC60325D-BFF8-498A-A5D3-F5ABB58014BD}.Release|x64.Build.0 = Release|Any CPU
 		{DC60325D-BFF8-498A-A5D3-F5ABB58014BD}.Release|x86.ActiveCfg = Release|Any CPU
 		{DC60325D-BFF8-498A-A5D3-F5ABB58014BD}.Release|x86.Build.0 = Release|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Debug|x64.Build.0 = Debug|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Debug|x86.Build.0 = Debug|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Release|x64.ActiveCfg = Release|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Release|x64.Build.0 = Release|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Release|x86.ActiveCfg = Release|Any CPU
+		{97D988F6-78A8-4239-8868-1C4341CD2670}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

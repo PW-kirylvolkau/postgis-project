@@ -58,7 +58,7 @@ namespace GeoAPILibrary
         public Parsed parsed { get; set; } 
     }
 
-    public class Root    {
+    public class GeoDetailData    {
         public List<Feature> features { get; set; } 
         public string type { get; set; } 
         public Query query { get; set; } 

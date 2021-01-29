@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GeoAPILibrary\GeoAPILibrary.csproj" />
+      <ProjectReference Include="..\TripMapApi\TripMapApi.csproj" />
     </ItemGroup>
 
 </Project>

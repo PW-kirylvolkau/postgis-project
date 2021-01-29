@@ -20,12 +20,12 @@ namespace GeoAPILibrary
         }
 
     }
-    public class GeoAPIEntity
+    public class GeoData
     {
         public string Address { get; set; }
         public Coordinates Coords { get; set; }
 
-        public GeoAPIEntity(Properties props){
+        public GeoData(Properties props){
             this.Address = props.formatted;
             this.Coords = new Coordinates(props.lon, props.lat);
         }

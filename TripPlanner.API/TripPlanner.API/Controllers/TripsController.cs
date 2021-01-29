@@ -73,8 +73,6 @@ namespace TripPlanner.API.Controllers
         {
             var trip = await _tripRepository.GetById(id);
             var user = await _userManager.GetUserAsync(User);
-
-            var temp = await GeoAPIFunctions.GetCoordinates("Minsk");
             
             if (user.Id != trip.User.Id) return NotFound();
             
